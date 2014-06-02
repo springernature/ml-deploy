@@ -58,6 +58,15 @@ function delete-version($app as xs:string, $version as xs:string) {
 };
 
 
+
+(: called in deploy script to do post install config :)
+declare %rxq:POST %rxq:path("/apps/init") %rxq:produces("text/plain")
+function steps-init($name as xs:string) {
+  let $_ := apps:create-permissions()
+  return "OK&#10;"
+};
+
+
 (: steps :)
 
 declare %rxq:GET %rxq:path("/steps") %rxq:produces("text/plain")
@@ -72,3 +81,4 @@ function apply-step($name as xs:string) {
   let $once := xdmp:get-request-field("once", "") ne "false"
   return steps:apply($name, $query, $db, $once)
 };
+

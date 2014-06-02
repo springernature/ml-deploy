@@ -55,7 +55,7 @@ declare function delete-version($app as xs:string, $version as xs:string) as xs:
 };
 
 
-declare %private function get-permissions()
+declare function create-permissions()
 {
   xdmp:eval('
     xquery version "1.0-ml";
@@ -68,7 +68,10 @@ declare %private function get-permissions()
       <database>{xdmp:database("Security")}</database>
       <isolation>different-transaction</isolation>
     </options>
-  ),
+  )
+};
+
+declare %private function get-permissions() {
   xdmp:permission("mldeploy-access-role", "read"),
   xdmp:permission("mldeploy-access-role", "execute")
 };

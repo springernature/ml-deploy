@@ -64,4 +64,11 @@ curl --progress-bar -X POST ${CREDENTIALS} \
     2>&1 | tee -a "${PACKAGE_LOG}"
 errorcheck
 
+
+echo Initialising..
+curl --progress-bar -X POST ${CREDENTIALS} \
+    --data-binary @/dev/null \
+    "http://${HOST}:7654/apps/init"
+
+echo
 echo "Finished"
