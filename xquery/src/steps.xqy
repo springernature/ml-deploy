@@ -12,7 +12,7 @@ declare function apply($name as xs:string, $query as xs:string, $db as xs:string
   if (fn:not($apply-once) or fn:not(applied($name)))
   then (
     eval($query, $db),
-    add($name, $db),
+    if ($apply-once) then add($name, $db) else (),
     fn:concat("Applied step: ", $name, " (db: ", $db, ")")
   )
   else "Skipped step: " || $name
