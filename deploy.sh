@@ -2,7 +2,7 @@
 set -e
 
 # defaults
-HOST="localdocker"
+HOST="ml.local.springer-sbm.com"
 AUTH="admin:admin"
 PACKAGE_ZIP="package.zip"
 
@@ -10,7 +10,7 @@ function usage() {
   printf '
 usage: deploy.sh [options...]
 Options:
-  -t <target host>       Target hostname. Defaults to localhost
+  -t <target host>       Target hostname. Defaults to ml.local.springer-sbm.com
   -c <user:password>     Credentials. Defaults to admin:admin
   -p <package zip path>  Path to package zip. Defaults to package.zip
 '
@@ -40,7 +40,7 @@ function errorcheck() {
     grep -q error $PACKAGE_LOG && exit 1 || true
 }
 
-rm $PACKAGE_LOG
+echo "" > $PACKAGE_LOG
 
 echo Deploying ${PACKAGE_ZIP} as ${PACKAGE_NAME} to ${URL}
 

@@ -65,7 +65,7 @@ function list-steps() {
   rxq:response(steps:list() ! fn:concat(./@name, " ", ./@applied-at), "No steps found")
 };
 
-declare %rxq:POST %rxq:path("/steps/(.+)") %rxq:produces("text/plain")
+declare %rxq:PUT %rxq:path("/steps/(.+)") %rxq:produces("text/plain")
 function apply-step($name as xs:string) {
   let $query := xdmp:get-request-body("text")
   let $db := xdmp:get-request-field("db", "Documents")
