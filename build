@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+rm -rf target
+
+if [ -n "$GO_PIPELINE_LABEL" ] ; then
+  VERSION=$GO_PIPELINE_LABEL
+else
+  VERSION=LOCAL
+fi
+
+cp -r package target
+cp xquery/src/* target/databases/Modules/content/6666cd76f96956469e7be39d750cc7d9
+cd target
+zip -rq package.zip .
+
+echo "Created package target/package.zip"
+
+cp ../deploy.sh .
+zip -q mldeploy-${VERSION}.zip package.zip deploy.sh
+
+echo "Created artifact mldeploy-${VERSION}.zip"

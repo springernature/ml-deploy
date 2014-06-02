@@ -1,0 +1,27 @@
+<pkg:manifest root="/" xmlns:pkg="http://marklogic.com/manage/package">
+  <pkg:doc name="controller.xqy">
+    <pkg:uri>/controller.xqy</pkg:uri>
+    <pkg:kind>text</pkg:kind>
+    <pkg:hash>FAKE-3898980738067596623</pkg:hash>
+  </pkg:doc>
+  <pkg:doc name="apps.xqy">
+    <pkg:uri>/apps.xqy</pkg:uri>
+    <pkg:kind>text</pkg:kind>
+    <pkg:hash>FAKE-6472511911241241120</pkg:hash>
+  </pkg:doc>
+  <pkg:doc name="steps.xqy">
+    <pkg:uri>/steps.xqy</pkg:uri>
+    <pkg:kind>text</pkg:kind>
+    <pkg:hash>FAKE-6472511911241241120</pkg:hash>
+  </pkg:doc>
+  <pkg:doc name="rxq.xqy">
+    <pkg:uri>/rxq.xqy</pkg:uri>
+    <pkg:kind>text</pkg:kind>
+    <pkg:hash>FAKE-14159718716191859114</pkg:hash>
+  </pkg:doc>
+  <pkg:doc name="url-rewriter.xqy">
+    <pkg:uri>/url-rewriter.xqy</pkg:uri>
+    <pkg:kind>text</pkg:kind>
+    <pkg:hash>FAKE-12731176326720701351</pkg:hash>
+  </pkg:doc>
+</pkg:manifest>

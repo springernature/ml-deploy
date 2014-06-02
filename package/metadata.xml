@@ -1,0 +1,8 @@
+<pkg:metadata xmlns:pkg="http://marklogic.com/manage/package">
+  <pkg:package-version>2.0</pkg:package-version>
+  <user xmlns="http://marklogic.com/manage/package">admin</user>
+  <group xmlns="http://marklogic.com/manage/package">Default</group>
+  <host xmlns="http://marklogic.com/manage/package">rob-mbp.local</host>
+  <timestamp xmlns="http://marklogic.com/manage/package">2014-05-30T15:49:31.172487+01:00</timestamp>
+  <platform xmlns="http://marklogic.com/manage/package">macosx</platform>
+</pkg:metadata>
