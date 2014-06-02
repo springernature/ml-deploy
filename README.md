@@ -3,12 +3,12 @@
 
 ## Overview
 
-MarkLogic configuration management and application deployment
+Bootstraps a fresh MarkLogic installation with an API for deploying applications and applying configuration steps.
 
 * run configuration scripts to create databases, add indexes etc.
 * deploy applications packaged as zip files
 * manage multiple versions of applications
-* common admin utilities
+
 
 ## Application Management
 
