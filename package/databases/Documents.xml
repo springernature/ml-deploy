@@ -1,0 +1,20 @@
+<package-database xmlns="http://marklogic.com/manage/package/databases">
+  <metadata xmlns:db="http://marklogic.com/manage/package/databases">
+    <package-version>2.0</package-version>
+    <user>admin</user>
+    <group>Default</group>
+    <host>rob-mbp.local</host>
+    <timestamp>2014-05-30T15:49:36.706841+01:00</timestamp>
+    <platform>macosx</platform>
+  </metadata>
+  <config>
+    <name>Documents</name>
+    <links>
+      <forests-list>
+	      <forest-name>Documents</forest-name>
+      </forests-list>
+      <security-database>Security</security-database>
+      <schema-database>Schemas</schema-database>
+    </links>
+  </config>
+</package-database>

@@ -76,7 +76,7 @@
     <links>
       <group-name>Default</group-name>
       <database>Modules</database>
-      <modules-database>Modules</modules-database>
+      <modules-database>Documents</modules-database>
       <default-user>nobody</default-user>
     </links>
   </config>
