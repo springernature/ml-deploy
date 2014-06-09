@@ -5,9 +5,16 @@
 
 Bootstraps a fresh MarkLogic installation with an API for deploying applications and applying configuration steps.
 
-* run configuration scripts to create databases, add indexes etc.
-* deploy applications packaged as zip files
-* manage multiple versions of applications
+* runs configuration scripts to create databases, add indexes etc.
+* deploys xquery applications packaged as zip files
+* manages multiple versions of applications
+
+
+## Installation
+
+`./build` creates a MarkLogic configuration package at `target/package.zip`.
+
+`./deploy.sh` deploys the package to a MarkLogic host. See script for options.
 
 
 ## Application Management
@@ -49,7 +56,10 @@ GET `/steps`
 POST `/steps/[step name]?db=[target db name]&once=[true|false]`  
 
 request body = contents of step file  
-`db` Name of database context. Defaults to 'Documents'  
+`db` Name of database context. Defaults to 'Documents'.
 `once` Control whether steps will be skipped if they have already been run on the host. Defaults to true.
 
-e.g `curl -X POST --digest -u admin:admin -d@step1.xqy http://localhost:7654/steps/step1.xqy?db=SomeDatabase`
+
+e.g. To run a step every time:
+`curl -X POST --digest -u admin:admin -d@step1.xqy http://localhost:7654/steps/step1.xqy?once=false`
+
