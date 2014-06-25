@@ -3,7 +3,7 @@ set -e
 
 # defaults
 HOST="ml.local.springer-sbm.com"
-AUTH="deployer:DeployMe"
+AUTH="admin:admin"
 PACKAGE_ZIP="package.zip"
 
 function usage() {
