@@ -55,7 +55,14 @@ declare function delete-version($app as xs:string, $version as xs:string) as xs:
 };
 
 
-declare function create-permissions()
+declare function setup-permissions()
+{
+  add-access-permissions(),
+  create-deployer-user()
+};
+
+
+declare %private function add-access-permissions()
 {
   xdmp:eval('
     xquery version "1.0-ml";
@@ -69,6 +76,19 @@ declare function create-permissions()
       <isolation>different-transaction</isolation>
     </options>
   )
+};
+
+declare %private function create-deployer-user()
+{
+  xdmp:eval('
+  xquery version "1.0-ml";
+  import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
+  sec:create-user-with-role("deployer", "Deploys modules", "DeployMe", "admin", (), ())
+  ', (),
+    <options xmlns="xdmp:eval">
+      <database>{xdmp:database("Security")}</database>
+      <isolation>different-transaction</isolation>
+    </options>)
 };
 
 declare %private function get-permissions() {

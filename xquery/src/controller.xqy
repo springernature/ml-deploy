@@ -62,7 +62,7 @@ function delete-version($app as xs:string, $version as xs:string) {
 (: called in deploy script to do post install config :)
 declare %rxq:POST %rxq:path("/apps/init") %rxq:produces("text/plain")
 function steps-init($name as xs:string) {
-  let $_ := apps:create-permissions()
+  let $_ := apps:setup-permissions()
   return "OK&#10;"
 };
 
