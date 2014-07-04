@@ -1,6 +1,5 @@
 # mldeploy
 
-
 ## Overview
 
 Bootstraps a fresh MarkLogic installation with an API for deploying applications and applying configuration steps.
@@ -12,54 +11,56 @@ Bootstraps a fresh MarkLogic installation with an API for deploying applications
 
 ## Installation
 
-`./build` creates a MarkLogic configuration package at `target/package.zip`.
+To install the deployment endpoints in ML, simply run the following from the root of ml-deploy:
 
-`./deploy.sh` deploys the package to a MarkLogic host. See script for options.
-
+    ./build && ./deploy.sh
 
 ## Application Management
 
-A version of an application is packaged as a zip file. To read and execute modules user must have role `mldeploy-access-role`.
+**Note:** To read and execute modules user must have role `mldeploy-access-role`.
 
-### Install application from http repo
-POST `/apps/[name]/[version]?artifact=http://repo/artifact.zip`
+### Endpoints
 
-### Install application from zip
-PUT `/apps/[name]/[version]`
+    # Install application from zip
+    PUT /apps/[name]/[version]
+    
+    # List of installed applications
+    GET /apps
+    
+    # List of installed versions of an application
+    GET /apps/[name]
+    
+    # List of files installed for an application version
+    GET /apps/[name]/[version]
+    
+    # View file
+    GET /apps/[name]/[version]/[file path]
+    
+    # Delete an application version
+    DELETE /apps/[name]/[version]    
 
-e.g. `curl -sS -f --digest -u admin:admin --upload-file artifact.zip http://localhost:7654/apps/[name]/[version]`
+### Module deployment
 
-### List of installed applications
-GET `/apps`
+From within your apps, you can use the following script to help deploying modules:
 
-### List of installed versions of an application
-GET `/apps/[name]`
+    curl -fsSL "https://bitbucket.org/springersbm/ml-deploy/raw/master/extras/deploy-modules.sh" | bash /dev/stdin -h
 
-### List of files installed for an application version
-GET `/apps/[name]/[version]`
+In the build script of your app, you'd then typically have something like this:
 
-### View file
-GET `/apps/[name]/[version]/[file path]`
-
-### Delete an application version
-DELETE `/apps/[name]/[version]`
-
+    declare -r modules_version="0.42"
+    declare -r app_version=${GO_PIPELINE_LABEL:-"LOCAL"}
+    declare -r deploy_script="https://bitbucket.org/springersbm/ml-deploy/raw/master/extras/deploy-modules.sh"
+    curl -fsSL $deploy_script | bash /dev/stdin -a my-app -v $app_version -p $modules_version
 
 ## Configuration Management
 
-Manages applying configuration steps.
+### Endpoints
+    # List of applied steps
+    GET /steps
 
-### List of applied steps
-GET `/steps`
-
-### Apply a step
-POST `/steps/[step name]?db=[target db name]&once=[true|false]`  
-
-request body = contents of step file  
-`db` Name of database context. Defaults to 'Documents'.
-`once` Control whether steps will be skipped if they have already been run on the host. Defaults to true.
-
-
-e.g. To run a step every time:
-`curl -X POST --digest -u admin:admin -d@step1.xqy http://localhost:7654/steps/step1.xqy?once=false`
-
+    # Apply a step
+    # db: Name of database context. Defaults to 'Documents'.
+    # once: If set to false, will always execute step. Defaults to true.
+    # HTTP request body: contents of step file 
+    # Example: curl -X POST --digest -u admin:admin -d@step1.xqy http://localhost:7654/steps/step1.xqy?once=false
+    POST /steps/[step_name]?db=[db_name]&once=[true|false]
