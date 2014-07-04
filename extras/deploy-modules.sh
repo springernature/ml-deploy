@@ -2,12 +2,12 @@
 #
 # Use this script in apps that want to deploy modules to ML.
 #
-# sh "$(curl -fsSL https://bitbucket.org/.../deploy-modules.sh)" -a my-app -p 0.42
+# curl -fsSL "https://bitbucket.org/springersbm/ml-deploy/raw/e6298a6bd1ff0c8a244114310ca2e6db5e2c6b7f/extras/deploy-modules.sh" | bash /dev/stdin -a my-app
 #
 set -e
 
 declare app_name=
-declare app_version=LOCAL
+declare pp_version=LOCAL
 declare target="ml.local.springer-sbm.com"
 declare file=
 declare published_version=
@@ -49,7 +49,7 @@ artifact_path () {
 }
 
 artifact_remote_url () {
-  echo "$repo/$repo_path/$artifact_path/$artifact_name/$published_version/$(artifact_file)"
+  echo "$repo/$repo_path/$(artifact_path)/$artifact_name/$published_version/$(artifact_file)"
 }
 
 artifact_cache_dir () {
@@ -105,20 +105,20 @@ if [ -n "$published_version" ]; then
   file="$(artifact_cache_path)"
   echo "Downloading $(artifact_remote_url) to $file"
   mkdir -p $(artifact_cache_dir)
-  curl --silent --show-error -o $file $(artifact_remote_url)
+  curl -f --silent --show-error -o $file $(artifact_remote_url)
 fi
 
 # locally we need to delete first because we always use the version "LOCAL"
 if [[ "$app_version" == "LOCAL" ]]; then
   echo "No application version specified. Deploying as LOCAL."
   echo "Deleting LOCAL version at $(deploy_url)"
-  #curl -sS --digest -u admin:admin -X DELETE $(deploy_url)
+  curl -fsS --digest -u admin:admin -X DELETE $(deploy_url)
   echo
 fi
 
 echo "Deploying $file to $(deploy_url)"
-curl -sS --digest -u deployer:DeployMe --upload-file $file $(deploy_url)
+curl -fsS --digest -u deployer:DeployMe --upload-file $file $(deploy_url)
 
 echo
 echo "Finished successfully. New modules available at: http://$target:7655/$app_name/$app_version/"
-
+echo
