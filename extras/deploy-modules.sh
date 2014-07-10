@@ -101,12 +101,10 @@ process_args () {
 
 process_args "$@"
 
-file="$(artifact_cache_path)"
-
 if [ -n "$published_version" ] && [[ "$app_version" != "LOCAL" ]]; then
-  echo "Downloading $(artifact_remote_url) to $file"
+  echo "Downloading $(artifact_remote_url) to $(artifact_cache_path)"
   mkdir -p $(artifact_cache_dir)
-  curl -f --silent --show-error -o $file $(artifact_remote_url)
+  curl -f --silent --show-error -o $(artifact_cache_path) $(artifact_remote_url)
 fi
 
 # locally we need to delete first because we always use the version "LOCAL"
