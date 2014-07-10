@@ -7,7 +7,7 @@
 set -e
 
 declare app_name=
-declare pp_version=LOCAL
+declare app_version=LOCAL
 declare target="ml.local.springer-sbm.com"
 declare file=
 declare published_version=
@@ -101,8 +101,9 @@ process_args () {
 
 process_args "$@"
 
-if [ -n "$published_version" ]; then
-  file="$(artifact_cache_path)"
+file="$(artifact_cache_path)"
+
+if [ -n "$published_version" ] && [[ "$app_version" != "LOCAL" ]]; then
   echo "Downloading $(artifact_remote_url) to $file"
   mkdir -p $(artifact_cache_dir)
   curl -f --silent --show-error -o $file $(artifact_remote_url)
@@ -110,7 +111,6 @@ fi
 
 # locally we need to delete first because we always use the version "LOCAL"
 if [[ "$app_version" == "LOCAL" ]]; then
-  echo "No application version specified. Deploying as LOCAL."
   echo "Deleting LOCAL version at $(deploy_url)"
   curl -fsS --digest -u admin:admin -X DELETE $(deploy_url)
   echo
