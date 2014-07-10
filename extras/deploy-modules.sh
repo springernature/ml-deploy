@@ -101,7 +101,7 @@ process_args () {
 
 process_args "$@"
 
-if [ -n "$published_version" ] && [[ "$app_version" != "LOCAL" ]]; then
+if [ ! -e "$(artifact_cache_path)" ]; then
   echo "Downloading $(artifact_remote_url) to $(artifact_cache_path)"
   mkdir -p $(artifact_cache_dir)
   curl -f --silent --show-error -o $(artifact_cache_path) $(artifact_remote_url)
@@ -114,8 +114,8 @@ if [[ "$app_version" == "LOCAL" ]]; then
   echo
 fi
 
-echo "Deploying $file to $(deploy_url)"
-curl -fsS --digest -u deployer:DeployMe --upload-file $file $(deploy_url)
+echo "Deploying $(artifact_cache_path) to $(deploy_url)"
+curl -fsS --digest -u deployer:DeployMe --upload-file $(artifact_cache_path) $(deploy_url)
 
 echo
 echo "Finished successfully. New modules available at: http://$target:7655/$app_name/$app_version/"
