@@ -10,7 +10,7 @@ declare app_name=
 declare app_version=LOCAL
 declare target="ml.local.springer-sbm.com"
 declare file=
-declare published_version=LOCAL
+declare published_version=
 declare repo="http://repo.tools.springer-sbm.com:8081"
 declare -r repo_path="nexus/content/repositories/releases"
 declare -r repo_cache="${HOME}/.ivy2/cache"
@@ -25,8 +25,8 @@ usage () {
   -a | -app <name>          The name of the app (required)
   -v | -app-version <arg>   The version of the app. Default: $app_version
   -t | -target <host>       The target ml host. Default: $target
-  -f | -file <path>         Deploys a local modules artifact
-  -p | -published <version> Deploys a specific version of a published modules artifact. Default: $published_version
+  -f | -file <path>         Deploys a local modules artifact (required, unless -p is used)
+  -p | -published <version> Deploys a specific version of a published modules artifact to (required, unless -f is used)
   -r | -repo <url>          Repository in which module artifacts are published. Default: $repo
 
   Examples:
@@ -101,23 +101,16 @@ process_args () {
 
 process_args "$@"
 
-# make sure artifact is in local cache
-if [ -n "$file" ]; then
-  echo "Copying $file to $(artifact_cache_path)"
-  cp $file $(artifact_cache_path)
-else
-  # download if not in cache
-  if [ ! -f $(artifact_cache_path) ]; then
-    echo "Downloading $(artifact_remote_url) to $(artifact_cache_path)"
-    mkdir -p $(artifact_cache_dir)
-    curl -f --silent --show-error -o $(artifact_cache_path) $(artifact_remote_url)
-  fi
-  file=$(artifact_cache_path)
+if [ -n "$published_version" ]; then
+  file="$(artifact_cache_path)"
+  echo "Downloading $(artifact_remote_url) to $file"
+  mkdir -p $(artifact_cache_dir)
+  curl -f --silent --show-error -o $file $(artifact_remote_url)
 fi
 
-
-# if version is LOCAL delete existing modules
+# locally we need to delete first because we always use the version "LOCAL"
 if [[ "$app_version" == "LOCAL" ]]; then
+  echo "No application version specified. Deploying as LOCAL."
   echo "Deleting LOCAL version at $(deploy_url)"
   curl -fsS --digest -u admin:admin -X DELETE $(deploy_url)
   echo
