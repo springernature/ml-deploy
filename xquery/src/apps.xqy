@@ -81,9 +81,10 @@ declare %private function add-access-permissions()
 declare %private function create-deployer-user()
 {
   xdmp:eval('
-  xquery version "1.0-ml";
-  import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
-  sec:create-user-with-role("deployer", "Deploys modules", "DeployMe", "admin", (), ())
+    xquery version "1.0-ml";
+    import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
+    if (sec:user-exists("deployer")) then ()
+    else sec:create-user-with-role("deployer", "Deploys modules", "DeployMe", "admin", (), ())
   ', (),
     <options xmlns="xdmp:eval">
       <database>{xdmp:database("Security")}</database>
