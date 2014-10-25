@@ -82,3 +82,28 @@ function apply-step($name as xs:string) {
   return steps:apply($name, $query, $db, $once)
 };
 
+
+(: restart - checks boolean server field "restart-required" :)
+
+declare %rxq:GET %rxq:path("/restart-required") %rxq:produces("text/plain")
+function restart-required() {
+  is-restart-required()
+};
+
+declare %rxq:POST %rxq:path("/restart") %rxq:produces("text/plain")
+function restart() {
+  let $force := xdmp:get-request-field("force", "") eq "true"
+  return
+    if ($force or is-restart-required()) then
+      let $reason :=
+        if ($force) then "because of request to [ml-deploy]/restart?force=true"
+        else "because server field 'restart-required' set to true"
+      let $_ := xdmp:restart(xdmp:hosts(), $reason)
+      return "Restarting"
+    else "Restart not required"
+};
+
+declare %private function is-restart-required() as xs:boolean
+{
+  xdmp:get-server-field("restart-required") eq fn:true()
+};
