@@ -68,7 +68,7 @@ declare %private function add-access-permissions()
     xquery version "1.0-ml";
     import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
     declare variable $ROLE-NAME := "mldeploy-access-role";
-    declare variable $ROLE-DESC := "provides read and execute access to modules managed by mldeploy";
+    declare variable $ROLE-DESC := "provides read and execute access to modules managed by ml-deploy";
     if (sec:role-exists($ROLE-NAME)) then () else sec:create-role($ROLE-NAME, $ROLE-DESC, (), (), ())
     ', (),
     <options xmlns="xdmp:eval">
@@ -84,7 +84,7 @@ declare %private function create-deployer-user()
     xquery version "1.0-ml";
     import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
     if (sec:user-exists("deployer")) then ()
-    else sec:create-user-with-role("deployer", "Deploys modules", "DeployMe", "admin", (), ())
+    else sec:create-user("deployer", "ml-deploy user", "DeployMe", "admin", (), ())
   ', (),
     <options xmlns="xdmp:eval">
       <database>{xdmp:database("Security")}</database>
