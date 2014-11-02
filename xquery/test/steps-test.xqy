@@ -11,18 +11,30 @@ declare variable $steps :=
     <step name="step1.xqy" applied-at="2001-02-03T04:05:06" db="foo"/>
   </steps>;
 
+declare %private function in-documents-db($fn as xdmp:function) {
+  xdmp:invoke-function(function() {
+      $fn(),
+      xdmp:commit()
+    },
+    <options xmlns="xdmp:eval">
+      <database>{xdmp:database("Documents")}</database>
+      <transaction-mode>update</transaction-mode>
+    </options>
+  )
+};
+
 declare %test:setup function insert-test-data() {
-  xdmp:document-insert($steps-uri, $steps)
+  in-documents-db(function() { xdmp:document-insert($steps-uri, $steps) })
 };
 
 declare %test:teardown function delete-test-data() {
-  xdmp:document-delete($steps-uri)
+  in-documents-db(function() { xdmp:document-delete($steps-uri) })
 };
 
-declare %test:case function should-list-apps()
+declare %test:case function should-list-steps()
 {
-  let $actual := steps:list()
-  return assert:not-empty($actual/step[@name eq "step1.xqy" and @db eq "foo"])
+  let $steps := steps:list()
+  return assert:not-empty($steps[@name eq "step1.xqy" and @db eq "foo"])
 };
 
 declare %test:case function should-apply-step-not-already-applied()
