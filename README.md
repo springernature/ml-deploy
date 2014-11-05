@@ -55,6 +55,11 @@ In the build script of your app, you'd then typically have something like this:
     declare -r deploy_script="https://bitbucket.org/springersbm/ml-deploy/raw/master/extras/deploy-modules.sh"
     curl -fsSL $deploy_script | bash /dev/stdin -a my-app -v $app_version -p $modules_version
 
+
+### Housekeeping for old application versions
+
+Over time the `Modules` database will grow in size as it stores every version of every application deployed. To keep this under control use `extras/delete-unused-versions.sh`. It deletes versions if no activity is found in the server access logs, except for the 10 latest versions which are always kept. See the script's comments and usage for more details.
+
 ## Configuration Management
 
 ### Applying configuration steps
@@ -85,4 +90,3 @@ For example:
 
     # force: defaults to false
     # Restarts the cluster if restart is required or force is true.
-    
