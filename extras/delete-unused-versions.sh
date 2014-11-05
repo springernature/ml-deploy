@@ -52,7 +52,7 @@ delete_if_unused() {
   else
     printf "not found. Deleting ... "
     if ${do_delete}; then
-      delete_version "{1}"
+      delete_version "${1}"
     else
       printf "skipped (use -d to delete)\n"
     fi
@@ -62,6 +62,7 @@ delete_if_unused() {
 
 delete_version() {
   $kurl -X DELETE "${baseurl}/${1}"
+  printf "\n"
 }
 
 apps=$($kurl "${baseurl}")
