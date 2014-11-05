@@ -90,3 +90,10 @@ For example:
 
     # force: defaults to false
     # Restarts the cluster if restart is required or force is true.
+
+
+### Security
+
+At the moment ml-deploy creates a user with admin privileges: `deployer:DeployMe`.
+
+It's recommended that your first step file changes the password :)
