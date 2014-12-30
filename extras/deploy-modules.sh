@@ -8,7 +8,7 @@ set -e
 
 declare app_name=
 declare app_version=LOCAL
-declare target="ml.local.springer-sbm.com"
+declare target_servers="ml.local.springer-sbm.com"
 declare file=
 declare published_version=
 declare repo="http://repo.tools.springer-sbm.com:8081"
@@ -24,7 +24,8 @@ usage () {
   -h | -help                Print this message
   -a | -app <name>          The name of the app (required)
   -v | -app-version <arg>   The version of the app. Default: $app_version
-  -t | -target <host>       The target ml host. Default: $target
+  -t | -target_servers <host[,host,...]>       
+                            The target ml host (multiple separating with ','). Default: $target_servers
   -f | -file <path>         Deploys a local modules artifact (required, unless -p is used)
   -p | -published <version> Deploys a specific version of a published modules artifact to (required, unless -f is used)
   -r | -repo <url>          Repository in which module artifacts are published. Default: $repo
@@ -61,6 +62,9 @@ artifact_cache_path () {
 }
 
 deploy_url () {
+  local target=$1
+  local app_name=$2
+  local app_version=$3
   echo "http://$target:7654/apps/$app_name/$app_version"
 }
 
@@ -80,7 +84,7 @@ process_args () {
        -h|-help)        usage; exit 1 ;;
        -a|-app)         require_arg name "$1" "$2" && app_name="$2" && shift 2 ;;
        -v|-app-version) require_arg arg "$1" "$2" && app_version="$2" && shift 2 ;;
-       -t|-target)      require_arg host "$1" "$2" && target="$2" && shift 2 ;;
+       -t|-target)      require_arg host "$1" "$2" && target_servers="$2" && shift 2 ;;
        -f|-file)        require_arg path "$1" "$2" && file="$2" && shift 2 ;;
        -p|-published)   require_arg version "$1" "$2" && published_version="$2" && shift 2 ;;
        -r|-repo)        require_arg url "$1" "$2" && repo="$2" && shift 2 ;;
@@ -100,25 +104,26 @@ process_args () {
 }
 
 process_args "$@"
+for target in $(echo $target_servers | tr ',' ' '); do
+  if [ -n "$published_version" ]; then
+	file="$(artifact_cache_path)"
+	echo "Downloading $(artifact_remote_url) to $file"
+	mkdir -p $(artifact_cache_dir)
+	curl -f --silent --show-error -o $file $(artifact_remote_url)
+  fi
 
-if [ -n "$published_version" ]; then
-  file="$(artifact_cache_path)"
-  echo "Downloading $(artifact_remote_url) to $file"
-  mkdir -p $(artifact_cache_dir)
-  curl -f --silent --show-error -o $file $(artifact_remote_url)
-fi
+  # locally we need to delete first because we always use the version "LOCAL"
+  if [[ "$app_version" == "LOCAL" ]]; then
+	echo "No application version specified. Deploying as LOCAL."
+	echo "Deleting LOCAL version at $(deploy_url $target $app_name $app_version)"
+	curl -fsS --digest -u admin:admin -X DELETE $(deploy_url $target $app_name $app_version)
+	echo
+  fi
 
-# locally we need to delete first because we always use the version "LOCAL"
-if [[ "$app_version" == "LOCAL" ]]; then
-  echo "No application version specified. Deploying as LOCAL."
-  echo "Deleting LOCAL version at $(deploy_url)"
-  curl -fsS --digest -u admin:admin -X DELETE $(deploy_url)
+  echo "Deploying $file to $(deploy_url $target $app_name $app_version)"
+  curl -fsS --digest -u deployer:DeployMe --upload-file $file $(deploy_url $target $app_name $app_version)
+
   echo
-fi
-
-echo "Deploying $file to $(deploy_url)"
-curl -fsS --digest -u deployer:DeployMe --upload-file $file $(deploy_url)
-
-echo
-echo "Finished successfully. New modules available at: http://$target:7655/$app_name/$app_version/"
-echo
+  echo "Finished successfully. New modules available at: $(deploy_url $target $app_name $app_version)"
+  echo
+done
