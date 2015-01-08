@@ -16,6 +16,7 @@ declare -r repo_path="nexus/content/repositories/releases"
 declare -r repo_cache="${HOME}/.ivy2/cache"
 declare -r artifact_name="ml-modules"
 declare -r artifact_group="com.springer"
+declare -r ml_credentials="deployer:DeployMe"
 
 usage () {
   cat <<EOM
@@ -24,7 +25,7 @@ usage () {
   -h | -help                Print this message
   -a | -app <name>          The name of the app (required)
   -v | -app-version <arg>   The version of the app. Default: $app_version
-  -t | -target_servers <host[,host,...]>       
+  -t | -target_servers <host[,host,...]>
                             The target ml host (multiple separating with ','). Default: $target_servers
   -f | -file <path>         Deploys a local modules artifact (required, unless -p is used)
   -p | -published <version> Deploys a specific version of a published modules artifact to (required, unless -f is used)
@@ -112,16 +113,15 @@ for target in $(echo $target_servers | tr ',' ' '); do
 	curl -f --silent --show-error -o $file $(artifact_remote_url)
   fi
 
-  # locally we need to delete first because we always use the version "LOCAL"
-  if [[ "$app_version" == "LOCAL" ]]; then
-	echo "No application version specified. Deploying as LOCAL."
-	echo "Deleting LOCAL version at $(deploy_url $target $app_name $app_version)"
-	curl -fsS --digest -u admin:admin -X DELETE $(deploy_url $target $app_name $app_version)
+  # delete first if the version is "LOCAL" or "v1"
+  if [[ "$app_version" == "LOCAL" || "$app_version" == "v1" ]]; then
+	echo "Deleting existing version at $(deploy_url $target $app_name $app_version)"
+	curl -fsS --digest -u ${ml_credentials} -X DELETE $(deploy_url $target $app_name $app_version)
 	echo
   fi
 
   echo "Deploying $file to $(deploy_url $target $app_name $app_version)"
-  curl -fsS --digest -u deployer:DeployMe --upload-file $file $(deploy_url $target $app_name $app_version)
+  curl -fsS --digest -u ${ml_credentials} --upload-file $file $(deploy_url $target $app_name $app_version)
 
   echo
   echo "Finished successfully. New modules available at: $(deploy_url $target $app_name $app_version)"
