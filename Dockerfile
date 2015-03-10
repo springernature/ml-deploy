@@ -1,8 +1,5 @@
-FROM springersbm/ml-docker
+FROM springersbm/ml-docker:marklogic-8.0-1.1
 
 ADD . /tmp/ml-deploy
 
-RUN yum install -y zip unzip
-
-RUN cd /tmp/ml-deploy && ./build
-RUN /etc/init.d/MarkLogic start && /tmp/ml-deploy/try-port.sh localhost 8002 5 && cd /tmp/ml-deploy && ./deploy.sh -p target/package.zip -t localhost && /etc/init.d/MarkLogic stop
+RUN yum install -y zip unzip && cd /tmp/ml-deploy && ./build && /etc/init.d/MarkLogic start && /tmp/ml-deploy/try-port.sh localhost 8002 5 && cd /tmp/ml-deploy && ./deploy.sh -p target/package.zip -t localhost && /etc/init.d/MarkLogic stop
