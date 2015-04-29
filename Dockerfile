@@ -1,4 +1,4 @@
-FROM springersbm/ml-docker:marklogic-8.0-1.1
+FROM springersbm/ml-docker:marklogic-8.0-2
 
 ADD . /tmp/ml-deploy
 
