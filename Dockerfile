@@ -1,4 +1,4 @@
-FROM docker-registry.tools.pe.springer-sbm.com/springersbm/ml-docker:marklogic-8.0-2
+FROM docker-registry.tools.pe.springer-sbm.com/springersbm/ml-docker:ml_8.0-2
 
 ADD . /tmp/ml-deploy
 
