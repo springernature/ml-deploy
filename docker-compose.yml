@@ -1,0 +1,6 @@
+code:
+  image: docker-registry.tools.pe.springer-sbm.com/springersbm/fig-env
+  dns: *DNS
+  volumes:
+    - .:/home/dev/code
+    - $HOME/.ssh:/home/dev/.ssh

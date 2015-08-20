@@ -1,0 +1,25 @@
+#! /bin/bash
+# -*- mode: sh; fill-column: 80; -*- [Emacs]
+# to specify a specific version of the script use a url with the appropriate git commit in it
+# for example: https://bitbucket.org/springersbm/fig-env/raw/9e5b58aa7b59213970e6a62305c43506650836e4/docker_env.py
+
+set -o errexit
+
+remote_script_url=https://bitbucket.org/springersbm/fig-env/raw/master/docker_env.py
+local_script_name=docker_env.py
+
+# Make a temporary directory for this script to use
+tmp="${TMPDIR=/tmp}/${local_script_name}$$"
+trap 'rm -rf "$tmp" >/dev/null 2>&1' 0 # remove $tmp at program termination
+trap 'exit 2' 1 2 3 13 15
+mkdir "$tmp"
+
+script="$tmp/$local_script_name"
+
+if curl -sfLS "$remote_script_url" > "$script"; then
+  chmod +x "$script"
+  "$script" "$@"
+else
+  echo >&2 "Failed to download $remote_script_url"
+  exit 1
+fi
