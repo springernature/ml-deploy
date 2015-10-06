@@ -45,20 +45,20 @@ echo "" > $PACKAGE_LOG
 echo Deploying ${PACKAGE_ZIP} as ${PACKAGE_NAME} to ${URL}
 
 echo Deleting existing package..
-curl --progress-bar -X DELETE ${CREDENTIALS} \
+curl -q --progress-bar -X DELETE ${CREDENTIALS} \
     "${URL}/${PACKAGE_NAME}" \
     2>&1 | tee -a "${PACKAGE_LOG}"
 errorcheck
 
 echo Uploading package..
-curl --progress-bar -X POST ${CREDENTIALS} -H "Content-type: application/zip" \
+curl -q --progress-bar -X POST ${CREDENTIALS} -H "Content-type: application/zip" \
     --data-binary @"${PACKAGE_ZIP}" \
     "${URL}?pkgname=${PACKAGE_NAME}" \
     2>&1 | tee -a "${PACKAGE_LOG}"
 errorcheck
 
 echo Installing package..
-curl --progress-bar -X POST ${CREDENTIALS} \
+curl -q --progress-bar -X POST ${CREDENTIALS} \
     --data-binary @/dev/null \
     "${URL}/${PACKAGE_NAME}/install" \
     2>&1 | tee -a "${PACKAGE_LOG}"
@@ -66,7 +66,7 @@ errorcheck
 
 
 echo Initialising..
-curl --progress-bar -X POST ${CREDENTIALS} \
+curl -q --progress-bar -X POST ${CREDENTIALS} \
     --data-binary @/dev/null \
     "http://${HOST}:7654/apps/init" \
     2>&1 | tee -a "${PACKAGE_LOG}"

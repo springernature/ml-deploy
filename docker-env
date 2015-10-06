@@ -16,7 +16,7 @@ mkdir "$tmp"
 
 script="$tmp/$local_script_name"
 
-if curl -sfLS "$remote_script_url" > "$script"; then
+if curl -q -sfLS "$remote_script_url" > "$script"; then
   chmod +x "$script"
   "$script" "$@"
 else

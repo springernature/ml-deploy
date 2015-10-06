@@ -40,7 +40,7 @@ do
 done
 
 declare -r hostname="localhost"
-declare -r kurl="curl -sSf --digest -u ${auth}"
+declare -r kurl="curl -q -sSf --digest -u ${auth}"
 declare -r baseurl="http://${hostname}:7654/apps"
 declare -r logs="/var/opt/MarkLogic/Logs/*_AccessLog*.txt"
 

@@ -2,7 +2,7 @@
 #
 # Use this script in apps that want to deploy modules to ML.
 #
-# curl -fsSL "https://bitbucket.org/springersbm/ml-deploy/raw/master/extras/deploy-modules.sh" | bash /dev/stdin -a my-app
+# curl -q -fsSL "https://bitbucket.org/springersbm/ml-deploy/raw/master/extras/deploy-modules.sh" | bash /dev/stdin -a my-app
 #
 set -e
 
@@ -110,18 +110,18 @@ for target in $(echo $target_servers | tr ',' ' '); do
 	file="$(artifact_cache_path)"
 	echo "Downloading $(artifact_remote_url) to $file"
 	mkdir -p $(artifact_cache_dir)
-	curl -f --silent --show-error -o $file $(artifact_remote_url)
+	curl -q -f --silent --show-error -o $file $(artifact_remote_url)
   fi
 
   # delete first if the version is "LOCAL" or "v1"
   if [[ "$app_version" == "LOCAL" || "$app_version" == "v1" ]]; then
 	echo "Deleting existing version at $(deploy_url $target $app_name $app_version)"
-	curl -fsS --digest -u ${ml_credentials} -X DELETE $(deploy_url $target $app_name $app_version)
+	curl -q -fsS --digest -u ${ml_credentials} -X DELETE $(deploy_url $target $app_name $app_version)
 	echo
   fi
 
   echo "Deploying $file to $(deploy_url $target $app_name $app_version)"
-  curl -fsS --digest -u ${ml_credentials} --upload-file $file $(deploy_url $target $app_name $app_version)
+  curl -q -fsS --digest -u ${ml_credentials} --upload-file $file $(deploy_url $target $app_name $app_version)
 
   echo
   echo "Finished successfully. New modules available at: $(deploy_url $target $app_name $app_version)"
