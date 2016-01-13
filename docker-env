@@ -1,11 +1,9 @@
 #! /bin/bash
 # -*- mode: sh; fill-column: 80; -*- [Emacs]
-# to specify a specific version of the script use a url with the appropriate git commit in it
-# for example: https://bitbucket.org/springersbm/fig-env/raw/9e5b58aa7b59213970e6a62305c43506650836e4/docker_env.py
 
 set -o errexit
 
-remote_script_url=https://bitbucket.org/springersbm/fig-env/raw/master/docker_env.py
+remote_script_url=http://te-prod-go-01.springer-sbm.com/tools-engineering/${INCEPTION_BRANCH_NAME-master}/docker_env/docker_env.py
 local_script_name=docker_env.py
 
 # Make a temporary directory for this script to use
