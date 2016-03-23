@@ -1,4 +1,4 @@
-FROM docker-registry.tools.pe.springer-sbm.com/springersbm/ml-docker
+FROM te-docker.docker-registry.tools.springer-sbm.com/ml-docker
 
 ADD . /tmp/ml-deploy
 
