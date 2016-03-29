@@ -1,5 +1,5 @@
 code:
-  image: docker-registry.tools.pe.springer-sbm.com/springersbm/fig-env
+  image: te-docker.docker-registry.tools.springer-sbm.com/fig-env
   dns: *DNS
   volumes:
     - .:/home/dev/code
