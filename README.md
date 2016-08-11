@@ -46,13 +46,13 @@ To read and execute application modules, the user must be assigned the role `mld
 
 From within your apps, you can use the following script to help deploying modules:
 
-    curl -q -fsSL "https://bitbucket.org/springersbm/ml-deploy/raw/master/extras/deploy-modules.sh" | bash /dev/stdin -h
+    curl -q -fsSL "https://github.com/springernature/ml-deploy/raw/master/extras/deploy-modules.sh" | bash /dev/stdin -h
 
 In the build script of your app, you'd then typically have something like this:
 
     declare -r modules_version="0.42"
     declare -r app_version=${GO_PIPELINE_LABEL:-"LOCAL"}
-    declare -r deploy_script="https://bitbucket.org/springersbm/ml-deploy/raw/master/extras/deploy-modules.sh"
+    declare -r deploy_script="https://github.com/springernature/ml-deploy/raw/master/extras/deploy-modules.sh"
     curl -q -fsSL $deploy_script | bash /dev/stdin -a my-app -v $app_version -p $modules_version
 
 
