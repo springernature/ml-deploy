@@ -1,0 +1,34 @@
+# Generated using halfpipe cli version 0.0.0-DEV
+groups: []
+resources:
+- name: git
+  type: git
+  branch: halfpipe
+  source:
+    private_key: ((github.private_key))
+    uri: git@github.com:springernature/ml-deploy
+- name: ml-docker
+  type: docker-image
+  source:
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/marklogic
+    username: _json_key
+- name: Docker Registry
+  type: docker-image
+  source:
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/ml-deploy
+    username: _json_key
+resource_types: []
+jobs:
+- name: docker-push
+  serial: true
+  plan:
+  - get: git
+    trigger: true
+  - get: ml-docker
+    trigger: true
+  - put: Docker Registry
+    params:
+      build: git
+

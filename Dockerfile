@@ -1,4 +1,4 @@
-FROM te-docker.docker-registry.tools.springer-sbm.com/ml-docker
+FROM eu.gcr.io/halfpipe-io/marklogic/marklogic
 
 ADD . /tmp/ml-deploy
 
