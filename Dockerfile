@@ -1,4 +1,4 @@
-FROM eu.gcr.io/halfpipe-io/marklogic/marklogic
+FROM eu.gcr.io/halfpipe-io/marklogic
 
 ADD . /tmp/ml-deploy
 
