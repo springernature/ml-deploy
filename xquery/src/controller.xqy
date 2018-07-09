@@ -8,7 +8,7 @@ import module namespace steps = "springer.com/mldeploy/steps" at "steps.xqy";
 
 declare %rxq:GET %rxq:path("/") %rxq:produces("text/plain")
 function home() {
-  "Weclome to mldeploy. See http://bitbucket.org/springersbm/mldeploy for usage."
+  "Weclome to mldeploy. See https://github.com/springernature/ml-deploy for usage."
 };
 
 declare %rxq:GET %rxq:path("/apps") %rxq:produces("text/plain")
