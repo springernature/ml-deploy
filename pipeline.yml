@@ -34,10 +34,14 @@ jobs:
     trigger: true
   - get: ml-docker
     trigger: true
+    params:
+      save: true
   - aggregate:
     - put: New Docker Registry
       params:
         build: git
+        load_base: ml-docker
     - put: Old Docker Registry
       params:
         build: git
+        load_base: ml-docker
