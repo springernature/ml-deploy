@@ -1,0 +1,43 @@
+# fly -t content_hub sp -p ml-deploy-docker -c pipeline.yml
+
+resources:
+- name: git
+  type: git
+  source:
+    private_key: ((github.private_key))
+    uri: git@github.com:springernature/ml-deploy
+- name: ml-docker
+  type: docker-image
+  source:
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/marklogic
+    username: _json_key
+- name: New Docker Registry
+  type: docker-image
+  source:
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/ml-deploy
+    username: _json_key
+- name: Old Docker Registry
+  type: docker-image
+  source:
+    username: not
+    password: needed
+    repository: te-docker.docker-registry.tools.springer-sbm.com/ml-deploy
+    
+
+jobs:
+- name: docker-push
+  serial: true
+  plan:
+  - get: git
+    trigger: true
+  - get: ml-docker
+    trigger: true
+  - aggregate:
+    - put: New Docker Registry
+      params:
+        build: git
+    - put: Old Docker Registry
+      params:
+        build: git
