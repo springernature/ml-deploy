@@ -1,4 +1,17 @@
 #!/bin/bash
+
+
+
+
+# THIS SCRIPT IS DEPRECATED #
+
+# it deploys from the old artifactory which does not have the latest versions.
+
+# for new scripts see:
+#   * https://github.com/springernature/ml-deploy/blob/master/extras/deploy-ml-modules-artifact.sh
+#   * https://github.com/springernature/ml-deploy/blob/master/extras/deploy-local-zip.sh
+#
+
 #
 # Use this script in apps that want to deploy modules to ML.
 #
