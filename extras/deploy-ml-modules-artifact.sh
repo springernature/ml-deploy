@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# example usage:
+#
+# export ARTIFACTORY_USERNAME="$(vault read -field username springernature/oscar/artifactory)"
+# export ARTIFACTORY_PASSWORD="$(vault read -field password springernature/oscar/artifactory)"
+# export ML_MODULES_VERSION="2.1428"
+# export APP_NAME="myapp"
+#
+# ./deploy-ml-modules-artifact.sh
+#
+
+# MARKLOGIC_HOST and APP_VERSION are optional.
+
 require_env_vars() {
   declare env_ok=true
   for var in "$@"; do
@@ -46,10 +58,11 @@ deploy_to_marklogic() {
   done
 }
 
+# set defaults
+MARKLOGIC_HOST="${MARKLOGIC_HOST:-ml.local.springer-sbm.com}"
+APP_VERSION="${APP_VERSION:-LOCAL}"
 
-MARKLOGIC_HOST="{$MARKLOGIC_HOST:-ml.local.springernature.com"}
-
-require_env_vars "ARTIFACTORY_USERNAME" "ARTIFACTORY_PASSWORD" "APP_NAME" "APP_VERSION" "ML_MODULES_VERSION"
+require_env_vars "ARTIFACTORY_USERNAME" "ARTIFACTORY_PASSWORD" "APP_NAME" "ML_MODULES_VERSION"
 
 declare local_zip="/tmp/ml-modules-${ML_MODULES_VERSION}.zip"
 
