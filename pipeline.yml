@@ -6,42 +6,58 @@ resources:
   source:
     private_key: ((github.private_key))
     uri: git@github.com:springernature/ml-deploy
-- name: ml-docker
+- name: ml-docker-8
   type: docker-image
   source:
     password: ((gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/marklogic
     username: _json_key
-- name: New Docker Registry
+- name: ml-docker-9
+  type: docker-image
+  source:
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/marklogic9
+    username: _json_key
+- name: ml-deploy-8
   type: docker-image
   source:
     password: ((gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/ml-deploy
     username: _json_key
-- name: Old Docker Registry
+- name: ml-deploy-9
   type: docker-image
   source:
-    username: not
-    password: needed
-    repository: te-docker.docker-registry.tools.springer-sbm.com/ml-deploy
-    
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/ml-deploy-9
+    username: _json_key    
 
 jobs:
-- name: docker-push
-  serial: true
+- name: MarkLogic 8
   plan:
   - get: git
     trigger: true
-  - get: ml-docker
+  - get: ml-docker-8
     trigger: true
     params:
       save: true
   - aggregate:
-    - put: New Docker Registry
+    - put: ml-deploy-8
       params:
         build: git
-        load_base: ml-docker
-    - put: Old Docker Registry
+        load_base: ml-docker-8
+
+- name: MarkLogic 9
+  plan:
+  - get: git
+    trigger: true
+  - get: ml-docker-9
+    trigger: true
+    params:
+      save: true
+  - aggregate:
+    - put: ml-deploy-9
       params:
         build: git
-        load_base: ml-docker
+        load_base: ml-docker-9
+        build_args:
+          ML_VERSION: 9

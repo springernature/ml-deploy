@@ -1,4 +1,5 @@
-FROM eu.gcr.io/halfpipe-io/marklogic
+ARG ML_VERSION
+FROM eu.gcr.io/halfpipe-io/marklogic${ML_VERSION:-""}
 
 ADD . /tmp/ml-deploy
 
