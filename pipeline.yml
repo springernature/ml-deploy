@@ -22,7 +22,7 @@ resources:
   type: docker-image
   source:
     password: ((gcr.private_key))
-    repository: eu.gcr.io/halfpipe-io/ml-deploy
+    repository: eu.gcr.io/halfpipe-io/ml-deploy-8
     username: _json_key
 - name: ml-deploy-9
   type: docker-image
