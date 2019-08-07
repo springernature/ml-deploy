@@ -57,42 +57,40 @@ declare function delete-version($app as xs:string, $version as xs:string) as xs:
 
 declare function setup-permissions()
 {
-  add-access-permissions(),
-  create-deployer-user()
-};
-
-
-declare %private function add-access-permissions()
-{
   xdmp:eval('
-    xquery version "1.0-ml";
     import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
-    declare variable $ROLE-NAME := "mldeploy-access-role";
-    declare variable $ROLE-DESC := "provides read and execute access to modules managed by ml-deploy";
-    if (sec:role-exists($ROLE-NAME)) then () else sec:create-role($ROLE-NAME, $ROLE-DESC, (), (), ())
+    if (sec:role-exists("mldeploy-access-role")) then ()
+    else sec:create-role("mldeploy-access-role", "provides read and execute access to modules managed by ml-deploy", (), (), ()),
+    if (sec:role-exists("mldeploy-role")) then ()
+    else sec:create-role("mldeploy-role", "provides write access to modules managed by ml-deploy", (), (), ())
+    ;
+    import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
+    sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/unprotected-collections", "execute", "mldeploy-role"),
+    sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/unprotected-uri", "execute", "mldeploy-role")
+    ;
+    import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
+    if (sec:user-exists("deployer")) then ()
+    else sec:create-user("deployer", "ml-deploy user", "DeployMe", ("mldeploy-role", "mldeploy-access-role"), (), ())
     ', (),
     <options xmlns="xdmp:eval">
       <database>{xdmp:database("Security")}</database>
       <isolation>different-transaction</isolation>
     </options>
-  )
-};
-
-declare %private function create-deployer-user()
-{
+  ),
   xdmp:eval('
     xquery version "1.0-ml";
-    import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
-    if (sec:user-exists("deployer")) then ()
-    else sec:create-user("deployer", "ml-deploy user", "DeployMe", "admin", (), ())
-  ', (),
+    for $uri in cts:uris(), $permission in ("read", "execute")
+    return xdmp:document-add-permissions($uri, xdmp:permission("mldeploy-role", $permission))
+    ', (),
     <options xmlns="xdmp:eval">
-      <database>{xdmp:database("Security")}</database>
+      <database>{xdmp:database("Documents")}</database>
       <isolation>different-transaction</isolation>
-    </options>)
+    </options>
+  )
 };
 
 declare %private function get-permissions() {
   xdmp:permission("mldeploy-access-role", "read"),
-  xdmp:permission("mldeploy-access-role", "execute")
+  xdmp:permission("mldeploy-access-role", "execute"),
+  xdmp:permission("mldeploy-role", "update")
 };
