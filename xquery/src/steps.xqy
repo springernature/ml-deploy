@@ -2,6 +2,8 @@ xquery version "1.0-ml";
 
 module namespace steps = "springer.com/mldeploy/steps";
 
+import module namespace admin = "http://marklogic.com/xdmp/admin" at "/MarkLogic/admin.xqy";
+
 declare variable $URI := "/steps.xml";
 
 declare %private function in-documents-db($fn as xdmp:function) {
@@ -27,6 +29,12 @@ declare function apply($name as xs:string, $query as xs:string, $db as xs:string
     fn:concat("Applied step: ", $name, " (db: ", $db, ")")
   )
   else "Skipped step: " || $name
+};
+
+declare function save-config($config as element(configuration)) {
+  let $needs-restart := admin:save-configuration-without-restart($config)
+  where fn:exists($needs-restart)
+  return (xdmp:set-server-field("restart-required", fn:true()), "Restart required")
 };
 
 declare %private function applied($name as xs:string) as xs:boolean {
