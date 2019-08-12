@@ -33,8 +33,12 @@ declare function apply($name as xs:string, $query as xs:string, $db as xs:string
 
 declare function save-config($config as element(configuration)) {
   let $needs-restart := admin:save-configuration-without-restart($config)
-  where fn:exists($needs-restart)
-  return (xdmp:set-server-field("restart-required", fn:true()), "Restart required")
+  return
+    if (fn:exists($needs-restart)) then (
+      xdmp:set-server-field("restart-required", fn:true()),
+      "Config Saved. Restart required"
+    )
+    else "Config Saved. Restart not required"
 };
 
 declare %private function applied($name as xs:string) as xs:boolean {
