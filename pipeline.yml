@@ -35,6 +35,20 @@ resources:
     repository: eu.gcr.io/halfpipe-io/ml-deploy10
     username: _json_key
 
+- name: ml-docker-8
+  type: docker-image
+  source:
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/marklogic8
+    username: _json_key
+
+- name: ml-deploy-8
+  type: docker-image
+  source:
+    password: ((gcr.private_key))
+    repository: eu.gcr.io/halfpipe-io/ml-deploy8
+    username: _json_key
+
 jobs:
 - name: MarkLogic 9
   plan:
@@ -65,3 +79,19 @@ jobs:
         load_base: ml-docker-10
         build_args:
           ML_VERSION: 10
+
+- name: MarkLogic 8
+  plan:
+    - get: git
+      trigger: true
+    - get: ml-docker-8
+      trigger: true
+      params:
+        save: true
+    - aggregate:
+        - put: ml-deploy-8
+          params:
+            build: git
+            load_base: ml-docker-8
+            build_args:
+              ML_VERSION: 8
