@@ -4,48 +4,48 @@ resources:
 - name: git
   type: git
   source:
-    private_key: ((github.private_key))
+    private_key: ((halfpipe-github.private_key))
     uri: git@github.com:springernature/ml-deploy
 
 - name: ml-docker
   type: docker-image
   source:
-    password: ((gcr.private_key))
+    password: ((halfpipe-gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/marklogic
     username: _json_key
 
 - name: ml-deploy
   type: docker-image
   source:
-    password: ((gcr.private_key))
+    password: ((halfpipe-gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/ml-deploy
     username: _json_key
 
 - name: ml-docker-10
   type: docker-image
   source:
-    password: ((gcr.private_key))
+    password: ((halfpipe-gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/marklogic10
     username: _json_key
 
 - name: ml-deploy-10
   type: docker-image
   source:
-    password: ((gcr.private_key))
+    password: ((halfpipe-gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/ml-deploy10
     username: _json_key
 
 - name: ml-docker-8
   type: docker-image
   source:
-    password: ((gcr.private_key))
+    password: ((halfpipe-gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/marklogic8
     username: _json_key
 
 - name: ml-deploy-8
   type: docker-image
   source:
-    password: ((gcr.private_key))
+    password: ((halfpipe-gcr.private_key))
     repository: eu.gcr.io/halfpipe-io/ml-deploy8
     username: _json_key
 
