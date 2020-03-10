@@ -30,7 +30,7 @@ fetch_ml_modules() {
   declare repo_url="https://springernature.jfrog.io/springernature/libs-release-local/com/springer/ml-modules/ml-modules-${version}.zip"
 
   echo "Downloading ml-modules artifact ${repo_url} to ${local_artifact}"
-  curl -q -fsS -u "${credentials}" -o ${local_artifact} ${repo_url}
+  curl -q -L -fsS -u "${credentials}" -o ${local_artifact} ${repo_url}
   echo
 }
 
