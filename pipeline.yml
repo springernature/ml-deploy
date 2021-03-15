@@ -59,10 +59,12 @@ jobs:
     params:
       save: true
   - aggregate:
-    - put: ml-deploy
+    - put: ml-deploy-9
       params:
         build: git
-        load_base: ml-docker
+        load_base: ml-docker-9
+        build_args:
+          ML_VERSION: 9
 
 - name: MarkLogic 10
   plan:
@@ -73,7 +75,7 @@ jobs:
     params:
       save: true
   - aggregate:
-    - put: ml-deploy-10
+    - put: ml-deploy
       params:
         build: git
         load_base: ml-docker-10
