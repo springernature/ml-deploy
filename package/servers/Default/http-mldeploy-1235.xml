@@ -1,0 +1,78 @@
+<package-http-server xmlns:cts="http://marklogic.com/cts" xmlns="http://marklogic.com/manage/package/servers">
+  <config>
+    <!-- Documentation can be found here: https://docs.marklogic.com/admin-help/http-server -->
+    <server-type>http-server</server-type>
+    <group-name>Default</group-name>
+    <name>http-mldeploy-1235</name>
+    <package-http-properties>
+      <root>/</root>
+      <port>1235</port>
+      <enabled>true</enabled>
+      <authentication>digest</authentication>
+      <webDAV>false</webDAV>
+      <log-errors>true</log-errors>
+      <!-- <File-log-level>notice</webDAV> -->
+      <!-- <File-log-level>info</webDAV> -->
+      <distribute-timestamps>fast</distribute-timestamps>
+      <debug-allow>true</debug-allow>
+      <url-rewriter>/url-rewriter.xqy</url-rewriter>
+      <rewrite-resolves-globally>false</rewrite-resolves-globally>
+      <ssl-ciphers>ALL:!LOW:@STRENGTH</ssl-ciphers>
+    </package-http-properties>
+    <links>
+      <group-name>Default</group-name>
+      <modules-database>Documents</modules-database>
+      <database>Modules</database>
+      <default-user>nobody</default-user>
+    </links>
+  </config>
+</package-http-server>
+<!-- Example entries from Springer Link for package-http-properties -->
+      <!-- <display-last-login>false</display-last-login> -->
+      <!-- <threads>32</threads> -->
+      <!-- <request-timeout>30</request-timeout> -->
+      <!-- <keep-alive-timeout>5</keep-alive-timeout> -->
+      <!-- <session-timeout>3600</session-timeout> -->
+      <!-- <max-time-limit>3600</max-time-limit> -->
+      <!-- <default-time-limit>600</default-time-limit> -->
+      <!-- <execute>true</execute> -->
+      <!-- <address>0.0.0.0</address> -->
+      <!-- <static-expires>3600</static-expires> -->
+      <!-- <multi-version-concurrency-control>contemporaneous</multi-version-concurrency-control> -->
+      <!-- <internal-security>true</internal-security> -->
+      <!-- <concurrent-request-limit>0</concurrent-request-limit> -->
+      <!-- <compute-content-length>false</compute-content-length> -->
+      <!-- <profile-allow>true</profile-allow> -->
+      <!-- <output-sgml-character-entities>none</output-sgml-character-entities> -->
+      <!-- <output-encoding>UTF-8</output-encoding> -->
+      <!-- <output-method>default</output-method> -->
+      <!-- <output-byte-order-mark>default</output-byte-order-mark> -->
+      <!-- <output-cdata-section-namespace-uri/> -->
+      <!-- <output-cdata-section-localname/> -->
+      <!-- <output-doctype-public/> -->
+      <!-- <output-doctype-system/> -->
+      <!-- <output-escape-uri-attributes>default</output-escape-uri-attributes> -->
+      <!-- <output-include-content-type>default</output-include-content-type> -->
+      <!-- <output-indent>default</output-indent> -->
+      <!-- <output-indent-untyped>default</output-indent-untyped> -->
+      <!-- <output-media-type/> -->
+      <!-- <output-normalization-form>none</output-normalization-form> -->
+      <!-- <output-omit-xml-declaration>default</output-omit-xml-declaration> -->
+      <!-- <output-standalone>omit</output-standalone> -->
+      <!-- <output-undeclare-prefixes>default</output-undeclare-prefixes> -->
+      <!-- <output-version/> -->
+      <!-- <output-include-default-attributes>default</output-include-default-attributes> -->
+      <!-- <default-xquery-version>1.0-ml</default-xquery-version> -->
+      <!-- <pre-commit-trigger-depth>1000</pre-commit-trigger-depth> -->
+      <!-- <pre-commit-trigger-limit>10000</pre-commit-trigger-limit> -->
+      <!-- <schemas/> -->
+      <!-- <namespaces/> -->
+      <!-- <request-blackouts/> -->
+      <!-- <collation>http://marklogic.com/collation/</collation> -->
+      <!-- <error-handler/> -->
+      <!-- <ssl-certificate-template>0</ssl-certificate-template> -->
+      <!-- <ssl-allow-sslv3>true</ssl-allow-sslv3> -->
+      <!-- <ssl-allow-tls>true</ssl-allow-tls> -->
+      <!-- <ssl-hostname/> -->
+      <!-- <ssl-require-client-certificate>true</ssl-require-client-certificate> -->
+      <!-- <ssl-client-certificate-authorities/> -->
